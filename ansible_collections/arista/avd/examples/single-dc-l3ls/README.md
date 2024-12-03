@@ -427,7 +427,7 @@ l3leaf:
             - Ethernet2
             - Ethernet2
 
-    DC1_L3_LEAF2:
+    - group: DC1_L3_LEAF2
       bgp_as: 65102
       nodes:
         - name: dc1-leaf2a
