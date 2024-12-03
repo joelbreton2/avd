@@ -10087,7 +10087,10 @@ keys:
                 devices.'
         ip_address:
           type: str
-          description: IPv4 address/mask.
+          description: IPv4 address/mask or "dhcp".
+        dhcp_client_accept_default_route:
+          type: bool
+          description: Install default-route obtained via DHCP.
         ip_verify_unicast_source_reachable_via:
           type: str
           valid_values:
@@ -18046,6 +18049,9 @@ keys:
       router_id:
         type: str
         description: IPv4 Address.
+      is_hostname:
+        type: str
+        description: Hostname of Intermediate System.
       is_type:
         display_name: IS Type
         type: str
@@ -19418,6 +19424,9 @@ keys:
           bfd:
             type: bool
             description: Enable/Disable BFD.
+          make_before_break:
+            type: bool
+            description: Enable/Disable Make-Before-Break.
           ssm_range:
             type: str
             description: IPv4 Prefix associated with SSM.
@@ -19488,6 +19497,9 @@ keys:
                 bfd:
                   type: bool
                   description: Enable/Disable BFD.
+                make_before_break:
+                  type: bool
+                  description: Enable/Disable Make-Before-Break.
                 rp_addresses:
                   type: list
                   items:
