@@ -582,18 +582,18 @@ servers:
         mode: access
         spanning_tree_portfast: edge
   - name: dc1-leaf2-server1
-    adapters: 
-      - endpoint_ports: [ PCI1, PCI2 ] 
+    adapters:
+      - endpoint_ports: [ PCI1, PCI2 ]
         switch_ports: [ Ethernet5, Ethernet5 ]
         switches: [ dc1-leaf2a, dc1-leaf2b ]
         vlans: 11-12,21-22
-        native_vlan: 4092 
+        native_vlan: 4092
         mode: trunk
         spanning_tree_portfast: edge
         port_channel:
-          endpoint_port_channel: Bond1 #this is not in the group vars 
+          endpoint_port_channel: Bond1 #this is not in the group vars
           mode: active
-  
+
       - endpoint_ports: [ iLO ]
         switch_ports: [ Ethernet5 ]
         switches: [ dc1-leaf2c ]
