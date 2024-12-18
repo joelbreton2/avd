@@ -433,7 +433,8 @@ l3leaf:
           uplink_switch_interfaces: [Ethernet4, Ethernet4]
 ```
 
-###Need to change the numbering TODO
+### Need to change the numbering TODO
+
 1. `platform` references default settings defined in AVD specific to certain switch platforms.
 2. `loopback_ipv4_pool` defines the IP scope from which AVD assigns IPv4 addresses for Loopback0. Please note that this IP pool is identical to the one used for the spine switches in this example. To avoid setting the same IP addresses for several devices, we define the option `loopback_ipv4_offset`.
 3. `loopback_ipv4_offset` offsets all assigned loopback IP addresses counting from the beginning of the IP scope. This is required to avoid overlapping IPs when the same IP pool is used for two different node_types (like spine and l3leaf in this example). The offset is "2" because each spine switch uses one loopback address.
@@ -582,18 +583,18 @@ servers:
         mode: access
         spanning_tree_portfast: edge
   - name: dc1-leaf2-server1
-    adapters: 
-      - endpoint_ports: [ PCI1, PCI2 ] 
+    adapters:
+      - endpoint_ports: [ PCI1, PCI2 ]
         switch_ports: [ Ethernet5, Ethernet5 ]
         switches: [ dc1-leaf2a, dc1-leaf2b ]
         vlans: 11-12,21-22
-        native_vlan: 4092 
+        native_vlan: 4092
         mode: trunk
         spanning_tree_portfast: edge
         port_channel:
-          endpoint_port_channel: Bond1 #this is not in the group vars 
+          endpoint_port_channel: Bond1 #this is not in the group vars
           mode: active
-  
+
       - endpoint_ports: [ iLO ]
         switch_ports: [ Ethernet5 ]
         switches: [ dc1-leaf2c ]
