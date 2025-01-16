@@ -3832,6 +3832,8 @@ interface Dps1
 ```eos
 !
 interface Ethernet1
+   !! this is my interface do not touch
+   !! it connects to the super firewall
    traffic-policy input BLUE-C1-POLICY
    traffic-policy output BLUE-C2-POLICY
    description P2P_LINK_TO_DC1-SPINE1_Ethernet1
@@ -5088,6 +5090,8 @@ interface Port-Channel3
    isis authentication key 0 <removed>
 !
 interface Port-Channel5
+   !! this is my interface do not touch
+   !! it connects to the super firewall
    description DC1_L2LEAF1_Po1
    bgp session tracker ST2
    switchport trunk allowed vlan 110,201

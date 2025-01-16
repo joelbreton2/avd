@@ -6,6 +6,9 @@ ethernet_interfaces:
     peer_interface: Ethernet1
     peer_type: spine
     description: P2P_LINK_TO_DC1-SPINE1_Ethernet1
+    comment: |
+      this is my interface do not touch
+      it connects to the super firewall
     speed: forced 100gfull
     mtu: 1500
     l2_mtu: 8000

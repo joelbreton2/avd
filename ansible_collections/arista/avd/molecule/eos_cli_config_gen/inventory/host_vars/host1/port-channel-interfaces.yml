@@ -3,6 +3,9 @@
 port_channel_interfaces:
   - name: Port-Channel5
     description: DC1_L2LEAF1_Po1
+    comment: |
+      this is my interface do not touch
+      it connects to the super firewall
     link_tracking_groups:
       - name: EVPN_MH_ES1
         direction: downstream
