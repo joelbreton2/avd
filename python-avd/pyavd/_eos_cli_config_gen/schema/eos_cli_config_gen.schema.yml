@@ -2052,6 +2052,9 @@ keys:
         comment:
           type: str
           description: Text comment added under ethernet interface.
+        comment:
+          type: str
+          description: Text comment added under ethernet interface.
         description:
           type: str
         shutdown:
