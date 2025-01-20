@@ -33148,7 +33148,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         }
         name: str
         comment: str | None
-        """Text comment added under port channel interface."""
+        """Text comment added under port-channel interface."""
         description: str | None
         profile: str | None
         """Interface profile."""
@@ -33457,7 +33457,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                 Args:
                     name: name
-                    comment: Text comment added under port channel interface.
+                    comment: Text comment added under port-channel interface.
                     description: description
                     profile: Interface profile.
                     logging: Subclass of AvdModel.

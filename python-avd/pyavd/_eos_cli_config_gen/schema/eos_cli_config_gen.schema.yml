@@ -9905,7 +9905,7 @@ keys:
           type: str
         comment:
           type: str
-          description: Text comment added under port channel interface.
+          description: Text comment added under port-channel interface.
         description:
           type: str
         profile:
