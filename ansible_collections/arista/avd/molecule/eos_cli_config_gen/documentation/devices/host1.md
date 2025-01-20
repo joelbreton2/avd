@@ -5095,7 +5095,7 @@ interface Port-Channel3
    isis authentication key 0 <removed>
 !
 interface Port-Channel5
-   !! testing multi line comments with | -
+   !! testing multi line comments with |-
    !! applied to port-channel 5
    description DC1_L2LEAF1_Po1
    bgp session tracker ST2
