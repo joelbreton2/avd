@@ -2,13 +2,30 @@
 - name: Install Examples
   hosts: localhost
   gather_facts: false
+  vars:
+    pwd: "{{ lookup('env', 'PWD') }}"
+    examples_dir: "{{ playbook_dir ~ '/../examples' }}"
+
   tasks:
-    - name: "Copy all examples to {{ pwd }}"
-      ansible.builtin.copy:
-        src: "{{ examples_dir }}/"
+    - name: Compress directory "{{ playbook_dir ~ '/../examples' }}" into "{{ pwd }}/temp.tgz"
+      community.general.archive:
+        path: "{{ examples_dir }}/"
+        dest: "{{ pwd }}/temp.tgz"
+    - name: unarchive the temp archive
+      ansible.builtin.unarchive:
+        src: "{{ pwd }}/temp.tgz"
         dest: "{{ pwd }}"
-        force: false
-        mode: "0o664"
-      vars:
-        pwd: "{{ lookup('env', 'PWD') }}"
-        examples_dir: "{{ playbook_dir ~ '/../examples' }}"
+    - name: remove temp archive
+      ansible.builtin.file:
+        path: "{{ pwd }}/temp.tgz"
+        state: absent
+
+    # - name: "Copy all examples to {{ pwd }}"
+    #   ansible.posix.synchronize:
+    #     src: "{{ examples_dir }}/"
+    #     dest: "{{ pwd }}"
+    #     # force: false
+    #     # mode: "0664"
+    #   vars:
+    #     pwd: "{{ lookup('env', 'PWD') }}"
+    #     examples_dir: "{{ playbook_dir ~ '/../examples' }}"
