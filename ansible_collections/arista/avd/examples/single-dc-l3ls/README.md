@@ -195,6 +195,28 @@ ansible_collections/arista/avd/examples/single-dc-l3ls/inventory_without_ip.yml
 
     - The file's contents, which in this case are specifications of connected endpoints (typically servers), are then applied to the children of the group, in this case, the two groups `DC1_L3_LEAVES` and `DC1_L2_LEAVES`.
 
+For example, all switches that are children of the DC1_SPINES group defined in the inventory will be of type `spine`.
+
+## Setting fabric-wide configuration parameters
+
+The `ansible-avd-examples/single-dc-l3ls/group_vars/FABRIC` folder contain files that defines generic settings that apply to all children of the `FABRIC` group as specified in the inventory described earlier.
+
+The first file defines how the Ansible host connects to the devices:
+
+```yaml title="fabric_ansible_connectivity.yml"
+--8<--
+ansible_collections/arista/avd/examples/single-dc-l3ls/group_vars/FABRIC/fabric_ansible_connectivity.yml
+--8<--
+```
+
+The following section specifies variables that generate configuration to be applied to all devices in the fabric:
+
+```yaml title="fabric_variables.yml"
+--8<--
+ansible_collections/arista/avd/examples/single-dc-l3ls/group_vars/FABRIC/fabric_variables.yml
+--8<--
+```
+
 ## Defining device types
 
 Since this example covers building an L3LS network, AVD must know about the device types, for example, spines, L3 leaves, L2 leaves, etc. The devices are already grouped in the inventory, so the device types are specified in the group variable files with the following names and content:
@@ -222,28 +244,8 @@ Since this example covers building an L3LS network, AVD must know about the devi
     ansible_collections/arista/avd/examples/single-dc-l3ls/group_vars/DC1_L2_LEAVES/l2_leaves.yml
     --8<--
     ```
-
-For example, all switches that are children of the DC1_SPINES group defined in the inventory will be of type `spine`.
-
-## Setting fabric-wide configuration parameters
-
-The `ansible-avd-examples/single-dc-l3ls/group_vars/FABRIC` folder contain files that defines generic settings that apply to all children of the `FABRIC` group as specified in the inventory described earlier.
-
-The first file defines how the Ansible host connects to the devices:
-
-```yaml title="fabric_ansible_connectivity.yml"
---8<--
-ansible_collections/arista/avd/examples/single-dc-l3ls/group_vars/FABRIC/fabric_ansible_connectivity.yml
---8<--
-```
-
-The following section specifies variables that generate configuration to be applied to all devices in the fabric:
-
-```yaml title="fabric_variables.yml"
---8<--
-ansible_collections/arista/avd/examples/single-dc-l3ls/group_vars/FABRIC/fabric_variables.yml
---8<--
-```
+!!! note
+    `uplink_interfaces` are not defined in the device type group_vars, they are defined in the fabric-wide configuration under `default_interfaces`.
 
 ## Setting device specific configuration parameters
 
