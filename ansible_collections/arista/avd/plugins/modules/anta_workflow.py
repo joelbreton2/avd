@@ -99,9 +99,6 @@ options:
           and a report is created to preview the tests that would be run against each device.
         type: bool
         default: false
-      logs_dir:
-        description: Directory where the ANTA debug logs will be stored. Logs are stored per ANTA instance. Debug logs can be created using `-vvv` verbosity.
-        type: str
   report:
     description: ANTA report settings. These settings define the output format and location of the ANTA reports.
     type: dict
@@ -159,7 +156,6 @@ EXAMPLES = r"""
           # tags:
           #   - leaf
           # dry_run: true
-          logs_dir: "{{ inventory_dir }}/anta/logs"
         report:
           csv_output: "{{ inventory_dir }}/anta/reports/anta_report.csv"
           md_output: "{{ inventory_dir }}/anta/reports/anta_report.md"
