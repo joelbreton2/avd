@@ -89,17 +89,22 @@ Start applying the [diataxis](https://diataxis.fr/) framework to the AVD documen
 
 Key design principals
 
-- easy to navigate
-- clear navigation headers
+- Easy to navigate
+- Clear navigation headers
+- Use container labs has a reference model
+- Use some components from diataxis and containerlab
+- Remove Roles concept as this is an ansiblism, focus on cloudvision integration model
 
-Move Navigation headers horizontally
-Use container labs has a reference model
-Use some components from diataxis and containerlab
+Proposed changes
 
+- Move Navigation headers horizontally
 - collapse tutorials and how-to guides **[Tutorials]**
 - collapse reference and explanation **[User Manual]**
 
 ## Navigation Menu
+
+- Move the Main Navigation Menu Horizontally to the top of the Page
+- Do we remove completely the navigation menu on the left ?
 
 ### Current
 
@@ -127,9 +132,18 @@ Quick Start
 Installation
 Tutorials [How-to Guides]
 User Manual
+Topology Examples
 Release Notes
 Contribute
 Support
+```
+
+#### Horizontally
+
+![image](navigation_menu.png)
+
+```yaml
+Home    Quick Start    Installation    Tutorials    User Manual    Topology Examples    Release Notes    Contribute    Support
 ```
 
 ### Quick Start
@@ -143,13 +157,64 @@ Its primary goal is to get a user to a basic, functional state immediately, bypa
 - **Not Comprehensive**: It intentionally omits advanced options, detailed explanations, and troubleshooting for edge cases.
 
 ```yaml
+Table of contents
+
 Installation
 Inventory
-Inputs [Maybe]
+Inputs (group_vars)
+  Fabric (physical)
+    Common Settings
+    Node Types
+      Defaults
+      Nodes
+      Node Groups
+  Network Services (logical)
+  Connected Endpoint (clients)
+Workflow
+  Build (playbook)
+  Deploy (playbook)
+  Validate (playbook)
+Folder Structure (outputs)
+  Intended
+  Documentation
+```
+
+#### With Topics
+
+``` yaml
+Table of contents
+
+Installation
+  pip [topic]
+  uv [topic]
+Inventory
+Inputs
+  Fabric (physical)
+    Node Types [section]
+      spine [topic]
+      l3leaf [topic]
+      l2leaf [topic]
+    Defaults [section]
+    Nodes [section]
+    Node Groups [section]
+    Common Settings [section]
+      connectivity [topic]
+      fabric_name [topic]
+      local_users [topic]
+      mgmt_gateway [topic]
+      dns_settings [topic]
+      ntp_settings [topic]
+  Network Services (logical)
+  Connected Endpoint (clients)
 Build
+
 Deploy
 Outputs [Maybe]
 ```
+
+#### Questions
+
+1. Do we need a separate section for local and cvaas?
 
 ### Tutorials [How-to Guides]
 
@@ -170,13 +235,8 @@ How do we structure the how-to guides ?
 Node Types
   Definition
   Defaults
-Roles
-  eos_designs
-  eos_cli_config_gen
-  cv_deploy
-  anta_runner
-
-
+Connected Endpoints
+Network Services
 ```
 
 ### User Manual
@@ -210,5 +270,29 @@ Network Services
 Connected Endpoints
 Input Variables
 PyAVD
+Versioning
+```
+
+### Change log [Release Notes]
+
+A great category for versioning, porting guides, and release notes would be something that clearly communicates to the user that this section is all about changes, updates, and managing different versions of the software.
+
+Here are a few excellent options, from most to least formal:
+
+1. **Versioning & Releases**
+Why it works: This is the most direct and technically accurate category. It uses the exact keywords for the content, making it very clear for developers and technical users. "Versioning" covers the policy, and "Releases" covers the specific artifacts like notes and guides.
+
+2. **Releases & Upgrades**
+Why it works: This is a very user-focused option. It highlights the main goal a user has when visiting this section: to learn about new releases and figure out how to upgrade. It's a bit more action-oriented.
+
+3. **Release Information**
+Why it works: A simple, all-encompassing, and safe choice. It's slightly more generic but still clearly communicates the purpose of the documents within.
+
+4. **Changelog**
+Why it works: In many modern software projects, "Changelog" is used as the top-level category for all release-related information. It's a very common and understood term. You would typically have the release notes directly on the main page and then link to versioning policies and porting guides from there.
+
+```yaml
+Porting Guide
+Release Notes
 Versioning
 ```
