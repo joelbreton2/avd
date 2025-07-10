@@ -118,6 +118,7 @@ Start applying the [diataxis](https://diataxis.fr/) framework to the AVD documen
 - Where do we move Ansible Collection Plugins
 - Do we repeat subjects in Tutorials and User Manual
 - Do we create a video section
+- Organisation [alphabetical, most common, ..]
 
 ### Current Navigation
 
@@ -397,7 +398,7 @@ PyAVD
 AVD Dev Containers
 ```
 
-### Change log [Release Notes]
+## Change log [Release Notes]
 
 A great category for versioning, porting guides, and release notes would be something that clearly communicates to the user that this section is all about changes, updates, and managing different versions of the software.
 
