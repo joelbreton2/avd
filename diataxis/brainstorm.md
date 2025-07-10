@@ -261,9 +261,11 @@ Current How-to's
   Configuring WAN
   Custom Descriptions and Names
   Custom Structured Configuration
-  Custom Templates x2
+  Custom Templates x2 [eos_desigs, eos_cli_config_gen]
   Generate Cloudvision Tags
 ```
+
+[Configuring PTP](https://avd.arista.com/5.5/ansible_collections/arista/avd/roles/eos_designs/docs/how-to/ptp.html)
 
 ## User Manual
 
@@ -277,6 +279,14 @@ A `user manual` is a comprehensive reference guide that describes a product's fe
 - **Use Case**: You already know how to use the photo editing app, but you look up the "Magic Wand Tool" in the manual to see its specific tolerance settings.
 
 ### Question/Discussion
+
+1. What sections can we move here?
+   - Input Variables
+   - Getting Started
+   - Ansible Plugins
+   - Ansible Roles [Overview]
+   - PyAVD
+   - AVD Dev Containers
 
 ### Current Structure
 
@@ -337,8 +347,10 @@ Ansible Collection Roles
       Switching
       System Settings
       Metadata
+```
 
 ### Proposed Structure
+
 ```yaml
 Concepts
   Build
@@ -406,3 +418,196 @@ Porting Guide
 Release Notes
 Versioning
 ```
+
+## Example - converting existing How-to guide with gemeni
+
+### Question in Gemini
+
+```yaml
+transform this url in a tutorial
+https://avd.arista.com/5.5/ansible_collections/arista/avd/roles/eos_designs/docs/how-to/ptp.html
+```
+
+### Response
+
+## Tutorial: Your First PTP Configuration with AVD
+
+**Goal:** In this tutorial, you'll learn how to implement a basic, stable Precision Time Protocol (PTP) configuration for an entire network fabric using Arista Validated Designs (AVD).
+
+**Scenario:** We have a simple fabric and our goal is to enable PTP everywhere using the default settings, ensuring our spine switches are the preferred clock sources. We also need to provide PTP timing to one connected server.
+
+### Step 1: Enable PTP for the Entire Fabric
+
+First, we need to turn PTP on. The easiest way to ensure PTP is active everywhere is to enable it globally. This single setting provides a consistent baseline for all switches.
+
+In your main fabric inventory file (e.g., `fabric.yml`), add the following:
+
+```yaml
+ptp_settings:
+  enabled: true
+```
+
+That's it! With this one change, AVD will now generate the basic PTP configuration for all spine and leaf switches.
+
+### Step 2: Review the Default PTP Profile
+
+AVD is designed with smart defaults. Now that PTP is enabled, it automatically applies the **`aes67-r16-2016`** profile. For this tutorial, we will stick with this default.
+
+This profile provides a balanced rate of PTP messages (8 sync messages per second), making it suitable for a wide range of applications. You don't need to configure anything in this step; just be aware that AVD has already selected a sensible profile for you.
+
+### Step 3: Understand Automatic Priorities
+
+With PTP enabled, a process called the **Best Master Clock Algorithm (BMCA)** runs to elect the most stable clock source. AVD helps ensure this election has a predictable and stable outcome.
+
+You don't need to add any configuration here, but AVD is already doing the following for you in the background:
+
+- It has given your **spine switches a PTP priority of 20**.
+- It has given your **leaf switches a PTP priority of 30**.
+
+Since a lower number wins, the spines will always be preferred as clock sources over the leaves. This creates a stable hierarchy automatically.
+
+### Step 4: Enable PTP for a Connected Server
+
+Now, let's provide PTP to a device connected to one of our leaf switches. By default, PTP is **not** enabled on endpoint-facing ports, so we must enable it manually.
+
+In your inventory file where you define your servers, find the server that needs PTP and add the `ptp` block to its adapter configuration.
+
+```yaml
+servers:
+  - name: my-media-server
+    adapters:
+    - switch_ports: [ Ethernet7 ]
+      switches: [ leaf1a ]
+      # Add this block to enable PTP for the server
+      ptp:
+        enabled: true
+```
+
+This tells AVD to enable PTP specifically on port `Ethernet7` of switch `leaf1a`, allowing `my-media-server` to receive timing information.
+
+### Step 5: Review and Deploy
+
+Let's review the simple but powerful configuration we've built. Your PTP settings in your inventory files should look something like this:
+
+**In `fabric.yml`:**
+
+```yaml
+ptp_settings:
+  enabled: true
+```
+
+**In your server inventory file:**
+
+```yaml
+servers:
+  - name: my-media-server
+    adapters:
+    - switch_ports: [ Ethernet7 ]
+      switches: [ leaf1a ]
+      ptp:
+        enabled: true
+```
+
+Now, you can run the AVD playbook to deploy your configuration. Once deployed, you can log into a switch and use the command `show ptp` to verify that PTP is active and see the clock's status.
+
+### Congratulations
+
+You've successfully configured a robust, stable PTP setup for your entire fabric and a connected endpoint. You learned how to enable PTP globally and for specific interfaces, and you understood how AVD's smart defaults for profiles and priorities work to your advantage.
+
+From here, you could try experimenting with different **PTP profiles** or **manually setting a priority** for a specific switch to further your understanding.
+
+## Now User Manual example
+
+## AVD PTP Configuration User Manual
+
+### **Document Version:** 5.5
+
+This manual provides a comprehensive reference for all parameters related to the configuration of Precision Time Protocol (PTP) within the Arista Validated Designs (AVD) framework.
+
+## **1. PTP Overview**
+
+AVD provides a structured data model for configuring PTP on Arista EOS devices. The configuration is hierarchical, allowing for settings to be applied globally at the fabric level and overridden at more specific levels, such as per node type, group, or individual device.
+
+Key features include:
+
+- **PTP Profiles:** Pre-defined sets of PTP parameters for common industry standards.
+- **Automatic Priority Management:** Intelligent assignment of PTP priorities to ensure a stable clock hierarchy.
+- **Automatic Clock Identity:** Predictable generation of PTP clock identities for easier management.
+
+## **2. Global PTP Settings**
+
+These parameters are defined under the `ptp_settings` key at the fabric level (e.g., in `FABRIC.yml`).
+
+| Parameter | Type | Description | Default |
+| :--- | :--- | :--- | :--- |
+| **`enabled`** | Boolean | Globally enables or disables PTP for the fabric. | `false` |
+| **`profile`** | String | Sets the PTP profile for all devices. Accepted values are `aes67`, `smpte2059-2`, `aes67-r16-2016`. | `aes67-r16-2016` |
+| **`auto_clock_identity`**| Boolean | Enables or disables automatic generation of the PTP clock identity. If `false`, the system MAC is used. | `true` |
+| **`clock_identity_prefix`**| String | Sets a custom 3-byte prefix for the auto-generated clock identity. Must be a quoted string (e.g., `"01:02:03"`). | `"00:1C:73"` |
+
+## **3. Node and Group Level Settings**
+
+These parameters are configured under the `ptp:` key and can be set at multiple levels (per-node, per-group, per-node-type).
+
+### **3.1. General PTP Configuration**
+
+| Parameter | Type | Description | Default |
+| :--- | :--- | :--- | :--- |
+| **`enabled`** | Boolean | Enables or disables PTP for the specific scope (node, group, etc.). Overrides global setting. | `false` |
+| **`profile`** | String | Overrides the fabric-level PTP profile for the specific scope. | Inherited |
+| **`domain`** | Integer | Sets the PTP domain number (0-255). | `null` |
+| **`forward_unicast`** | Boolean | Enables hardware forwarding of unicast PTP packets. | `false` |
+| **`source_ip`** | String | Manually sets the source IPv4 address for PTP packets. | `null` |
+| **`ttl`** | Integer | Manually sets the Time-To-Live for PTP packets. | `1` |
+| **`mlag`** | Boolean | If `true`, configures PTP on the MLAG peer-link Port-Channel. | `false` |
+
+### **3.2. PTP Priority Configuration**
+
+| Parameter | Type | Description | Default |
+| :--- | :--- | :--- | :--- |
+| **`priority1`** | Integer | Manually overrides the PTP priority 1 value (0-255). Lower is higher priority. | `20` for spines, `30` for leaves, `127` otherwise |
+| **`priority2`** | Integer | Manually overrides the PTP priority 2 value (0-255). | `node_id % 256` |
+
+### **3.3. PTP Clock Identity Configuration**
+
+| Parameter | Type | Description | Default |
+| :--- | :--- | :--- | :--- |
+| **`auto_clock_identity`**| Boolean | Overrides the fabric-level `auto_clock_identity` setting. | Inherited |
+| **`clock_identity_prefix`**| String | Overrides the fabric-level prefix for the auto-generated clock identity. | Inherited |
+| **`clock_identity`** | String | Manually sets the entire 6-byte clock identity (e.g., `"01:02:03:04:05:06"`). | `null` |
+
+### **3.4. PTP Monitoring Configuration**
+
+These parameters are configured under `ptp.monitor`.
+
+| Parameter | Type | Description | Default |
+| :--- | :--- | :--- | :--- |
+| **`enabled`** | Boolean | Enables or disables the PTP monitor feature. | `true` |
+| **`threshold.offset_from_master`**| Integer| Sets the threshold in nanoseconds for the offset from the master clock. | `250` |
+| **`threshold.mean_path_delay`** | Integer | Sets the threshold in nanoseconds for the mean path delay. | `1500` |
+| **`sequence_ids.enabled`** | Boolean | Enables monitoring of missing messages based on sequence IDs. | `true` |
+| **`sequence_ids.announce`** | Integer | Sets the number of missing announce messages to tolerate. | `3` |
+| **`sequence_ids.delay_resp`** | Integer | Sets the number of missing delay response messages to tolerate. | `3` |
+| **`sequence_ids.follow_up`** | Integer | Sets the number of missing follow-up messages to tolerate. | `3` |
+| **`sequence_ids.sync`** | Integer | Sets the number of missing sync messages to tolerate. | `3` |
+
+## **4. Interface-Specific PTP Configuration**
+
+### **4.1. Connected Endpoints (Servers)**
+
+These parameters are configured under a server's `adapters` definition.
+
+| Parameter | Type | Description | Default |
+| :--- | :--- | :--- | :--- |
+| **`ptp.enabled`** | Boolean | Enables PTP on the switch port connected to the endpoint. | `false` |
+| **`ptp.endpoint_role`** | String | Defines the PTP role for the endpoint interface. `bmca` allows participation in the clock election. | `follower` |
+| **`ptp.profile`** | String | Sets a specific PTP profile for this interface, overriding the global profile. | Inherited |
+
+### **4.2. P2P (Switch-to-Switch) Links**
+
+These parameters are for dedicated point-to-point links configured under `core_interfaces.p2p_links`.
+
+| Parameter | Type | Description | Default |
+| :--- | :--- | :--- | :--- |
+| **`ptp.enabled`** | Boolean | Enables PTP on the point-to-point link. | `false` |
+| **`include_in_underlay_protocol`**| Boolean | If `false`, the link will be configured as a routed port without an IP address and will not be used for data plane routing. | `true` |
