@@ -87,26 +87,37 @@ Start applying the [diataxis](https://diataxis.fr/) framework to the AVD documen
 
 ## Organisation/Structure
 
-Key design principals
+### Key design principals
 
 - Easy to navigate
 - Clear navigation headers
+- Optimize page length for content and performance
 - Use container labs has a reference model
 - Use some components from diataxis and containerlab
 - Remove Roles concept as this is an ansiblism, focus on cloudvision integration model
 
-Proposed changes
+### Proposed changes
 
 - Move Navigation headers horizontally
 - collapse tutorials and how-to guides **[Tutorials]**
 - collapse reference and explanation **[User Manual]**
 
+> ***Note:*** The current structure is designed to be flexible. As the project evolves, we can separate the content into more granular sections to maintain clarity and organization
+>
 ## Navigation Menu
 
-- Move the Main Navigation Menu Horizontally to the top of the Page
-- Do we remove completely the navigation menu on the left ?
+### Discussion
 
-### Current
+#### Changes
+
+- Move the Main Navigation Menu Horizontally to the top of the Page
+
+#### Questions
+
+- Do we remove completely the navigation menu on the left?
+- Where do we move Ansible Collection Plugins
+
+### Current Navigation
 
 ```yaml
 Home
@@ -124,7 +135,7 @@ AVD Dev Containers
 Support
 ```
 
-### Proposed
+### Proposed Navigation
 
 ```yaml
 Home
@@ -140,13 +151,16 @@ Support
 
 #### Horizontally
 
+[aclabs](https://aclabs.arista.com/)
 ![image](navigation_menu.png)
 
 ```yaml
-Home    Quick Start    Installation    Tutorials    User Manual    Topology Examples    Release Notes    Contribute    Support
+Home   Quick Start   Installation   Tutorials   User Manual   Topology Examples   Release Notes   Contribute   Support
 ```
 
-### Quick Start
+## Quick Start
+
+### Definition
 
 A quick start is a condensed set of instructions designed to help a user begin using a product or service as quickly as possible, focusing only on the most essential steps.
 Its primary goal is to get a user to a basic, functional state immediately, bypassing comprehensive details and advanced features. A quick start guide prioritizes speed and immediate results over thorough understanding.
@@ -155,6 +169,12 @@ Its primary goal is to get a user to a basic, functional state immediately, bypa
 - **Action-Oriented**: It focuses on a sequence of actions rather than explaining concepts.
 - **Fast**: It's designed to be completed in a very short amount of time.
 - **Not Comprehensive**: It intentionally omits advanced options, detailed explanations, and troubleshooting for edge cases.
+
+### Questions/Discussion
+
+1. Do we need a separate section for local and cvaas?
+
+### Proposed Structure
 
 ```yaml
 Table of contents
@@ -179,7 +199,7 @@ Folder Structure (outputs)
   Documentation
 ```
 
-#### With Topics
+### With Topics
 
 ``` yaml
 Table of contents
@@ -212,11 +232,9 @@ Deploy
 Outputs [Maybe]
 ```
 
-#### Questions
+## Tutorials [How-to Guides]
 
-1. Do we need a separate section for local and cvaas?
-
-### Tutorials [How-to Guides]
+### Definition
 
 A tutorial is a step-by-step learning experience designed for a beginner. It guides the user through a series of practical steps to complete a specific task from start to finish. The goal is to build foundational skills and understanding.
 
@@ -225,11 +243,11 @@ A tutorial is a step-by-step learning experience designed for a beginner. It gui
 - **Analogy**: A cooking class or a guided project.
 - **Use Case**: You're new to a photo editing app and follow a tutorial to learn how to remove a background from an image.
 
-How do we structure the how-to guides ?
+### Question/Discussion
 
-- roles
-- technology
-- topology
+1. Do we use Tutorials or How-to Guides
+
+### Proposed Structure
 
 ```yaml
 Node Types
@@ -237,9 +255,19 @@ Node Types
   Defaults
 Connected Endpoints
 Network Services
+
+Current How-to's
+  Configuring PTP
+  Configuring WAN
+  Custom Descriptions and Names
+  Custom Structured Configuration
+  Custom Templates x2
+  Generate Cloudvision Tags
 ```
 
-### User Manual
+## User Manual
+
+### Definition
 
 A `user manual` is a comprehensive reference guide that describes a product's features and functions in detail. It's not meant to be read from start to finish. Instead, users consult it when they have a specific question or need to understand a particular feature.
 
@@ -248,29 +276,111 @@ A `user manual` is a comprehensive reference guide that describes a product's fe
 - **Analogy**: A car's owner manual or a technical encyclopedia.
 - **Use Case**: You already know how to use the photo editing app, but you look up the "Magic Wand Tool" in the manual to see its specific tolerance settings.
 
+### Question/Discussion
+
+### Current Structure
+
+```yaml
+Ansible Collection Roles
+  eos_designs
+    Input Variables
+      Supported designs
+      Design Type
+      Fabric Topology
+      Fabric IP Addressing
+      Fabric Numbering
+      Node Type Variables
+      Node Type Customization
+      Type Settings
+      Default Node Type Settings
+      Node Type Settings
+      Default Interface Settings
+      L3 Edge and DCI
+      Core Interfaces Settings
+      Flagging a device as not deployed
+      Fabric Settings
+      Management Interface Settings
+      BFD Settings
+      BGP Settings
+      ACL Settings
+      OSPF Settings
+      Overlay Settings
+      EVPN Settings
+      WAN Settings
+      Management Settings
+      Monitoring
+      QoS
+      System Settings
+      Cloud Vision
+      Endpoint Connectivity
+      Network Services
+      Platform Settings
+      PTP Settings
+      Custom Structure
+      CloudVision Topology
+      Digital Twin
+  eos_cli_config_gen
+    Input Variables
+      Authentication
+      ACLs
+      Endpoint Security
+      Filters and Policies
+      Interfaces
+      Maintenance Mode
+      Management
+      Miscellaneous
+      Monitoring
+      Multicast
+      Quality of Service
+      Routing
+      Security
+      Switching
+      System Settings
+      Metadata
+
+### Proposed Structure
 ```yaml
 Concepts
   Build
   Deploy
   Validate
-Roles
-  eos_designs
-  cli_config_gen
-  cvp_configlet_upload
-  eos_config_deploy_cvp
-  eos_config_deploy_eapi
-  eos_validate_state
-  eos_snapshot
-  dhcp_provisioner
-  build_output_folders
-  cv_deploy
-  anta_runner
 Node Types
 Network Services
 Connected Endpoints
 Input Variables
+  Node Types
+    Variables
+    Settings
+    Customization
+    Defaults
+  Top Level Keys
+    default_interfaces
+    l3_edge
+    core_interfaces
+    is_deployed
+  Fabric Settings
+  Management Interface Settings
+  BFD Settings
+  BGP Settings
+  ACL Settings
+  OSPF Settings
+  Overlay Settings
+  EVPN Settings
+  WAN Settings
+  Management Settings
+  Monitoring
+  QoS
+  System Settings
+  Cloud Vision
+  Endpoint Connectivity
+  Network Services
+  Platform Settings
+  PTP Settings
+  Custom Structure
+  CloudVision Topology
+  Digital Twin
 PyAVD
-Versioning
+AVD Dev Containers
 ```
 
 ### Change log [Release Notes]
