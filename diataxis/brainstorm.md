@@ -116,6 +116,8 @@ Start applying the [diataxis](https://diataxis.fr/) framework to the AVD documen
 
 - Do we remove completely the navigation menu on the left?
 - Where do we move Ansible Collection Plugins
+- Do we repeat subjects in Tutorials and User Manual
+- Do we create a video section
 
 ### Current Navigation
 
