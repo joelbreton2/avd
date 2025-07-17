@@ -119,6 +119,8 @@ Start applying the [diataxis](https://diataxis.fr/) framework to the AVD documen
 - Do we repeat subjects in Tutorials and User Manual
 - Do we create a video section
 - Organisation [alphabetical, most common, ..]
+- Maybe nest Examples under How-to Guides
+- AAEP where to move
 
 ### Current Navigation
 
@@ -144,9 +146,9 @@ Support
 Home
 Quick Start
 Installation
-Tutorials [How-to Guides]
+How-to Guides
 User Manual
-Topology Examples
+Examples
 Release Notes
 Contribute
 Support
