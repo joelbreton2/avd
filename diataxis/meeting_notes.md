@@ -8,20 +8,66 @@
 
 ## July 17
 
+### Attendance
+
+- Petr, Julio, Carl, Joel
+
 ### Topics
 
 - Navigation
 - Implementation
   - Date (5.6, 6.0, ...)
   - Workflow (branch)
-- Formatting
+- Formatting/Styles
 - AI utilisation
 - Review
   - Quick Start
   - How-to
   - Reference
+- Table of Contents
+  - i.e. Release Notes
+  - Short Title
+
+### Discussion
+
+#### Navigation
+
+Nest PyAVD under User Manual
+
+```yaml
+User Manual
+ - Ansible Collection
+ - Input Variables
+ - PyAVD
+```
+
+- ~~Reverse How-to Guide and User Manual for now until we grow how-to guides~~
+
+#### Implementation
+
+- Sooner (when navigation pr is ready)
+- Work off devel when creating content
+
+#### Input Variables
+
+- **reason** it is one file to easily search with ctrl + f
+- split in smaller docs
+
+#### Strategy/Priority
+
+1. Navigation (almost complete)
+2. How-to guides (create content)
+3. User Manual (rework)
+
+#### Release Notes
+
+Show only H2 headings in table of content
 
 ## July 10
+
+### Attendance
+
+- Petr, Julio, Carl, Joel
 
 ### Main Navigation
 

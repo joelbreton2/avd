@@ -14,7 +14,7 @@ Before you begin, ensure you have the following installed on your control machin
 
 - **Python 3.8+**: AVD is built on Python.
 - **Ansible 2.14+**: The automation engine.
-- **Git**0: For cloning repositories.
+- **Git**: For cloning repositories.
 
 You can verify your Python and Ansible versions with:
 
@@ -28,10 +28,11 @@ ansible --version
 The core of AVD is distributed as an Ansible Collection.
 
 ```bash
-ansible-galaxy collection install arista.avd:==5.5.0
+pip install "pyavd[ansible]==5.5.1"
+ansible-galaxy collection install arista.avd:==5.5.1
 ```
 
-This command installs version 5.5.0 of the `arista.avd` collection. You can omit :`==5.5.0` to install the latest stable version, but specifying it ensures consistency with the documentation you linked.
+This command installs version 5.5.1 of the `arista.avd` collection. You can omit :`==5.5.1` to install the latest stable version, but specifying it ensures consistency with the documentation you linked.
 
 ### 3. Create Your AVD Project Directory
 

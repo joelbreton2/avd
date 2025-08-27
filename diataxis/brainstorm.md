@@ -149,7 +149,7 @@ Installation
 How-to Guides
 User Manual
 Examples
-Release Notes
+Version & Releases
 Contribute
 Support
 ```
@@ -160,7 +160,7 @@ Support
 ![image](navigation_menu.png)
 
 ```yaml
-Home   Quick Start   Installation   Tutorials   User Manual   Topology Examples   Release Notes   Contribute   Support
+Home   Quick Start   Installation   Tutorials   User Manual   Examples   Version & Releases   Contribute   Support
 ```
 
 ## Quick Start
@@ -400,7 +400,7 @@ PyAVD
 AVD Dev Containers
 ```
 
-## Change log [Release Notes]
+## Versioning & Releases [Release Notes]
 
 A great category for versioning, porting guides, and release notes would be something that clearly communicates to the user that this section is all about changes, updates, and managing different versions of the software.
 
