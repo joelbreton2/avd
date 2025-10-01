@@ -172,7 +172,7 @@ As discussed in the single DC scenario, all device types must be explicitly defi
 
     ```yaml
     --8<--
-    ansible_collections/arista/avd/examples/dual-dc-l3ls/group_vars/DC1_SPINES.yml:2:4
+    ansible_collections/arista/avd/examples/dual-dc-l3ls/group_vars/DC1_SPINES/dc1_spines.yml
     --8<--
     ```
 
@@ -180,7 +180,7 @@ As discussed in the single DC scenario, all device types must be explicitly defi
 
     ```yaml
     --8<--
-    ansible_collections/arista/avd/examples/dual-dc-l3ls/group_vars/DC1_L3_LEAFS.yml:2:4
+    ansible_collections/arista/avd/examples/dual-dc-l3ls/group_vars/DC1_L3_LEAFS/dc1_l3_leafs.yml
     --8<--
     ```
 
@@ -188,7 +188,7 @@ As discussed in the single DC scenario, all device types must be explicitly defi
 
     ```yaml
     --8<--
-    ansible_collections/arista/avd/examples/dual-dc-l3ls/group_vars/DC1_L2_LEAFS.yml:2:4
+    ansible_collections/arista/avd/examples/dual-dc-l3ls/group_vars/DC1_L2_LEAFS/dc1_l2_leafs.yml
     --8<--
     ```
 
@@ -196,7 +196,7 @@ As discussed in the single DC scenario, all device types must be explicitly defi
 
     ```yaml
     --8<--
-    ansible_collections/arista/avd/examples/dual-dc-l3ls/group_vars/DC2_SPINES.yml:2:4
+    ansible_collections/arista/avd/examples/dual-dc-l3ls/group_vars/DC2_SPINES/dc.yml
     --8<--
     ```
 
@@ -204,7 +204,7 @@ As discussed in the single DC scenario, all device types must be explicitly defi
 
     ```yaml
     --8<--
-    ansible_collections/arista/avd/examples/dual-dc-l3ls/group_vars/DC2_L3_LEAFS.yml:2:4
+    ansible_collections/arista/avd/examples/dual-dc-l3ls/group_vars/DC2_L3_LEAFS.yml
     --8<--
     ```
 
@@ -212,7 +212,7 @@ As discussed in the single DC scenario, all device types must be explicitly defi
 
     ```yaml
     --8<--
-    ansible_collections/arista/avd/examples/dual-dc-l3ls/group_vars/DC2_L2_LEAFS.yml:2:4
+    ansible_collections/arista/avd/examples/dual-dc-l3ls/group_vars/DC2_L2_LEAFS.yml
     --8<--
     ```
 
@@ -222,9 +222,9 @@ The `ansible-avd-examples/dual-dc-l3ls/group_vars/FABRIC.yml` file defines gener
 
 In this section, only additions to the previous example will be discussed. The only added change that must be inherited by both DCs is the L3 links between the L3 leafs, and it is represented at a fabric level using the following structure:
 
-```yaml title="FABRIC.yml"
+```yaml title="l3_edge.yml"
 --8<--
-ansible_collections/arista/avd/examples/dual-dc-l3ls/group_vars/FABRIC.yml:77:98
+ansible_collections/arista/avd/examples/dual-dc-l3ls/group_vars/FABRIC/l3_edge.yml
 --8<--
 ```
 
