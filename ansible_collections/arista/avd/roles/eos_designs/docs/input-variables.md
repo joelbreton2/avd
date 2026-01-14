@@ -1080,25 +1080,25 @@ ansible_collections/arista/avd/roles/eos_designs/docs/tables/cloudvision-setting
 ansible_collections/arista/avd/roles/eos_designs/docs/tables/cloudvision-tags.md
 --8<--
 
-## Endpoint connectivity
+## Downstream device configuration
 
 AVD supports two different data models for defining connectivity to endpoints:
 
-- ["Connected Endpoints"](#connected-endpoints-settings) is an endpoint-centric model intended for servers or other use cases where most ports have unique configurations.
-- ["Network Ports"](#network-ports-settings) is a compact and port-centric model intended for configuration of generic port configurations on large ranges of ports.
+- ["Connected Endpoints"](#connected-endpoints) is an endpoint-centric model intended for servers or other use cases where most ports have unique configurations.
+- ["Network Ports"](#network-ports) is a compact and port-centric model intended for configuration of generic port configurations on large ranges of ports.
 
 Both data models share the same underlying implementation and can coexist without conflicts.
 If a switch port is defined in both "Connected Endpoints" and "Network Ports", the "Connected Endpoints" configuration will take precedence.
 
-Both data models support variable inheritance from profiles defined under [`port_profiles`](#port-profiles-settings). The profiles can be shared between the models. Any setting defined under the `port_profiles` will be inherited from `parent_profile` to `profile` to `adapter`.
+Both data models support variable inheritance from profiles defined under [`port_profiles`](#port-profiles). The profiles can be shared between the models. Any setting defined under the `port_profiles` will be inherited from `parent_profile` to `profile` to `adapter`.
 
-### Connected endpoints settings
+### Connected endpoints
 
 - The connected endpoints variables define connectivity from the perspective of the endpoints that connect to the fabric.
 - Each endpoint can have one or more `adapters` defined, under which the connected `switches`, `switch_ports` and `endpoint_ports`
   must be set.
 - If port_channel mode is enabled under one "adapter", all switch_ports connected to that "adapter" will become part of this port-channel.
-- The keys used to define connected endpoints are configurable using [`connected_endpoints_keys`](#connected-endpoints-keys-settings).
+- The keys used to define connected endpoints are configurable using [`connected_endpoints_keys`](#connected-endpoints-keys).
   The default available keys are:
   - `servers`
   - `firewalls`
@@ -1267,7 +1267,7 @@ Both data models support variable inheritance from profiles defined under [`port
 ansible_collections/arista/avd/roles/eos_designs/docs/tables/connected-endpoints.md
 --8<--
 
-### Connected endpoints default description or description template settings
+#### Default description
 
 Connected endpoints support the customization of generated descriptions with a static value or template.
 
@@ -1275,7 +1275,23 @@ Connected endpoints support the customization of generated descriptions with a s
 ansible_collections/arista/avd/roles/eos_designs/docs/tables/default-connected-endpoints-description.md
 --8<--
 
-### Network ports settings
+### Connected endpoints keys
+
+The keys used to define Connected Endpoints are configurable using `connected_endpoints_keys`.
+
+Endpoints connecting to the fabric can be grouped by using separate keys.
+The keys can be customized to provide a better better organization or grouping of your data.
+
+`connected_endpoints_keys` should be defined in the top level group_vars for the fabric.
+
+!!! note
+    The default values will be overridden if defining this key, so it is recommended to copy the defaults and modify them.
+
+--8<--
+ansible_collections/arista/avd/roles/eos_designs/docs/tables/connected-endpoints-keys.md
+--8<--
+
+### Network ports
 
 The `network_ports` data model is intended to be used with `port_profiles` and `parent_profiles` to keep the configuration generic and compact,
 but all features and keys supported under `connected_endpoints.adapters` are also supported directly under `network_ports`.
@@ -1434,7 +1450,7 @@ All ranges defined under `switch_ports` will be expanded to individual port conf
 ansible_collections/arista/avd/roles/eos_designs/docs/tables/network-ports.md
 --8<--
 
-### Network ports default description or description template settings
+### Default description
 
 Network ports support the customization of generated descriptions with a static value or template.
 
@@ -1442,7 +1458,7 @@ Network ports support the customization of generated descriptions with a static 
 ansible_collections/arista/avd/roles/eos_designs/docs/tables/default-network-ports-description.md
 --8<--
 
-### Port profiles settings
+### Port profiles
 
 Optional profiles to share common settings for connected_endpoints and/or network_ports.
 Keys are the same as used under endpoint adapters. Keys defined under endpoints adapters take precedence.
@@ -1451,22 +1467,6 @@ A port profile can refer to another port profile using `parent_profile` to inher
 
 --8<--
 ansible_collections/arista/avd/roles/eos_designs/docs/tables/port-profiles.md
---8<--
-
-### Connected endpoints keys settings
-
-The keys used to define Connected Endpoints are configurable using `connected_endpoints_keys`.
-
-Endpoints connecting to the fabric can be grouped by using separate keys.
-The keys can be customized to provide a better better organization or grouping of your data.
-
-`connected_endpoints_keys` should be defined in the top level group_vars for the fabric.
-
-!!! note
-    The default values will be overridden if defining this key, so it is recommended to copy the defaults and modify them.
-
---8<--
-ansible_collections/arista/avd/roles/eos_designs/docs/tables/connected-endpoints-keys.md
 --8<--
 
 ## Network Services
