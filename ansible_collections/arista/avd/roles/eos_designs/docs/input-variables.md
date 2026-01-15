@@ -885,13 +885,13 @@ ansible_collections/arista/avd/roles/eos_designs/docs/tables/address-locking-set
 
 ## WAN Settings
 
-### WAN generic settings
+### Generic
 
 --8<--
 ansible_collections/arista/avd/roles/eos_designs/docs/tables/wan-settings.md
 --8<--
 
-### WAN hierarchy
+### Hierarchy
 
 !!! note
 
@@ -901,19 +901,19 @@ ansible_collections/arista/avd/roles/eos_designs/docs/tables/wan-settings.md
 ansible_collections/arista/avd/roles/eos_designs/docs/tables/wan-cv-pathfinder-regions.md
 --8<--
 
-### WAN path-groups and carriers
+### Path-groups and carriers
 
 --8<--
 ansible_collections/arista/avd/roles/eos_designs/docs/tables/wan-path-groups-and-carriers.md
 --8<--
 
-### WAN route-servers
+### Route-servers
 
 --8<--
 ansible_collections/arista/avd/roles/eos_designs/docs/tables/wan-route-servers.md
 --8<--
 
-### WAN Virtual topologies
+### Virtual topologies
 
 WAN virtual topologies leverage Deep Packet Inspection Engine to match traffic.
 
@@ -948,7 +948,7 @@ ansible_collections/arista/avd/roles/eos_designs/docs/tables/cv-pathfinder-inter
 ansible_collections/arista/avd/roles/eos_designs/docs/tables/zscaler-endpoints.md
 --8<--
 
-### WAN Zscaler Integration
+### Zscaler Integration
 
 --8<--
 ansible_collections/arista/avd/roles/eos_designs/docs/tables/wan-cv-pathfinder-zscaler-integration.md
