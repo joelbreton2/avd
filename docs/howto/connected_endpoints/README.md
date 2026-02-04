@@ -12,7 +12,13 @@
 
 This guide explains how to define port profiles, configure adapters for your endpoints, and generate the final switch configuration.
 
-### When to Use Connected Endpoints
+### Connected Endpoints or Network Ports
+
+AVD provides two distinct models for managing switch port configurations. Choosing the correct one depends on whether you are managing ports based on the specific devices connected to them or applying bulk settings to the switch itself.
+
+The **Connected Endpoints** model is device-centric. You define the configuration by describing the endpoint (server, firewall, storage) and then mapping it to the fabric.
+
+The **Network Ports** model is interface-centric. You define the configuration by targeting specific port ranges on a switch and applying a profile to them.
 
 Use `connected_endpoints` when:
 
@@ -31,17 +37,17 @@ Use `network_ports` instead when:
 
 ## Concepts
 
-**port_profiles**: Port profiles are used to share common settings for connected_endpoints and network_ports. Keys are the same as those used under endpoint adapters. Keys defined under endpoint adapters take precedence.
-
-**adapters**:  An adapter represents a network interface on the connected_endpoint.
+Before defining your endpoints, it is important to understand the relationship between Port Profiles and Adapters.
 
 ### Port Profiles
 
-A **Port Profile** is a reusable template that defines a standard set of switchport configurations. You create a profile once and then apply it to any number of connected endpoints. This ensures consistency and dramatically simplifies configuration.
+A **Port Profile** is a reusable template that defines a standard set of switchport configurations. You create a profile once and then apply it to any number of connected endpoints. This ensures consistency and dramatically simplifies configuration. A port profile can refer to another port profile using parent_profile to inherit settings in up to two levels (adapter->profile->parent_profile).
 
-A port profile can refer to another port profile using parent_profile to inherit settings in up to two levels (adapter->profile->parent_profile).
+- **Shared Logic**: These profiles are used by both connected_endpoints and network_ports.
+- **Standardization**: Changes made to a profile automatically propagate to every interface associated with it.
+- **Precedence**: While profiles provide defaults, any key defined directly under a specific adapter will take precedence over the profile setting.
 
-#### Key Settings for a Port Profile
+#### Settings for Port Profiles
 
 - `mode`: Can be `access` or `trunk`.
 - `vlans`: For `access` mode, the single VLAN ID. For `trunk` mode, the list of allowed VLANs.
@@ -55,9 +61,9 @@ Please consult the [User Manual](../../../ansible_collections/arista/avd/roles/e
 
 ### Adapters
 
-**Adapters** serve as the bridge between the Fabric (the switches) and the Endpoints (the devices). They define how a specific device is cabled and what network services (VLANs, VRFs) it should receive.
+An **Adapter** serve as the bridge between the Fabric (the switches) and the Endpoints (the devices). They define how a specific device is cabled and what network services (VLANs, VRFs) it should receive.
 
-#### Key settings Adapters
+#### Settings for Adapters
 
 Adapters define the physical mapping between the endpoint and the switch fabric:
 
@@ -83,6 +89,10 @@ ansible_collections/arista/avd/extensions/molecule/howto/inventory/group_vars/DC
 1. Profile for a single-homed server in VLAN 10
 2. Profile for a dual-homed (LACP) server trunking two VLANs
 3. Profile for a trunk port connecting to a firewall
+
+## Examples
+
+This section demonstrates how to implement the `connected_endpoints` concepts. We begin by defining **Port Profiles** to standardize our interface settings. Then, we configure the **Adapters** within our endpoint definitions to map physical connections while inheriting the logic from those profiles.
 
 ### Define your connected endpoints
 
@@ -166,6 +176,6 @@ docs/howto/connected_endpoints/artifacts/ESXI-HOST-03.cfg
 
 For complete details on all available properties, see:
 
-- [Port Profiles Settings](../../../ansible_collections/arista/avd/roles/eos_designs/docs/data-models.md#port-profiles-settings)
-- [Connected Endpoints Settings](../../../ansible_collections/arista/avd/roles/eos_designs/docs/data-models.md#connected-endpoints-settings)
-- [Network Ports Settings](../../../ansible_collections/arista/avd/roles/eos_designs/docs/data-models.md#network-ports-settings)
+- [Port Profiles](../../../ansible_collections/arista/avd/roles/eos_designs/docs/data-models.md#port-profiles-settings)
+- [Connected Endpoints](../../../ansible_collections/arista/avd/roles/eos_designs/docs/data-models.md#connected-endpoints-settings)
+- [Network Ports](../../../ansible_collections/arista/avd/roles/eos_designs/docs/data-models.md#network-ports-settings)
