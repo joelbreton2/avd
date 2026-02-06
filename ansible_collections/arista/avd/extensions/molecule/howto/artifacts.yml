@@ -12,3 +12,42 @@
     - header: "interface Ethernet11"
   artifact: "ESXI-HOST-03.cfg"
   output_dir: "../../../../../../docs/howto/connected_endpoints/artifacts/"
+
+# Network Ports artifacts
+- file: inventory/intended/configs/htnp-leaf1a.cfg
+  sections:
+    - header: "interface Ethernet10"
+    - header: "interface Ethernet11"
+    - header: "interface Ethernet12"
+    - header: "interface Ethernet13"
+    - header: "interface Ethernet14"
+    - header: "interface Ethernet15"
+  artifact: "htnp-leaf1a-webserver-ports.cfg"
+  output_dir: "../../../../../../docs/howto/network_ports/artifacts/"
+
+- file: inventory/intended/configs/htnp-leaf1a.cfg
+  sections:
+    - header: "interface Ethernet20"
+    - header: "interface Ethernet21"
+    - header: "interface Ethernet22"
+    - header: "interface Ethernet23"
+    - header: "interface Ethernet24"
+  artifact: "htnp-leaf1a-voip-ports.cfg"
+  output_dir: "../../../../../../docs/howto/network_ports/artifacts/"
+
+- file: inventory/intended/configs/htnp-leaf1b.cfg
+  sections:
+    - header: "interface Ethernet10"
+    - header: "interface Ethernet11"
+    - header: "interface Ethernet12"
+    - header: "interface Ethernet13"
+    - header: "interface Ethernet14"
+    - header: "interface Ethernet15"
+  artifact: "htnp-leaf1b-webserver-ports.cfg"
+  output_dir: "../../../../../../docs/howto/network_ports/artifacts/"
+
+- file: inventory/intended/configs/htnp-leaf1b.cfg
+  sections:
+    - header: "interface Ethernet20"
+  artifact: "htnp-leaf1b-trunk-port.cfg"
+  output_dir: "../../../../../../docs/howto/network_ports/artifacts/"

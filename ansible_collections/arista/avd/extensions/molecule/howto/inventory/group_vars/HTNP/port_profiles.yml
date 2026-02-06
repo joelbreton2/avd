@@ -1,0 +1,27 @@
+---
+port_profiles:  
+  - profile: PP-WebServer # (1)!
+    mode: access  
+    vlans: "100"
+    spanning_tree_portfast: edge  
+    storm_control:
+      all:
+        level: "10"
+        unit: percent
+
+  - profile: PP-VOIP-PHONE # (2)!
+    mode: access
+    vlans: "200"
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: enabled
+    poe:
+      priority: high
+      limit:
+        watts: "15.4"
+
+  - profile: PP-TRUNK-UPLINK # (3)!
+    mode: trunk
+    vlans: "100,200,300"
+    native_vlan: 1
+    spanning_tree_portfast: network
+

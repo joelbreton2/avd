@@ -1,0 +1,24 @@
+---
+network_ports:
+  - switches:  
+     - htnp-leaf1a  
+     - htnp-leaf1b  
+    switch_ports:  
+      - Ethernet10-15  # (1)!
+    profile: PP-WebServer  
+    description: "Web Server Ports"
+
+  - switches:  
+     - htnp-leaf1a  
+    switch_ports:  
+      - Ethernet20-24  # (2)!
+    profile: PP-VOIP-PHONE  
+    description: "VOIP Phone Ports"
+
+  - switches:  
+     - htnp-leaf1b  
+    switch_ports:  
+      - Ethernet20  # (3)!
+    profile: PP-TRUNK-UPLINK  
+    description: "Trunk Uplink Port"
+

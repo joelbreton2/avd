@@ -1,0 +1,29 @@
+---
+tenants:
+  - name: TENANT_HTNP
+    mac_vrf_vni_base: 20000
+    vrfs:
+      - name: VRF_WEB
+        vrf_vni: 300
+        svis:
+          - id: 100
+            name: WebServers
+            enabled: true
+            ip_address_virtual: 10.100.100.1/24
+
+      - name: VRF_VOICE
+        vrf_vni: 400
+        svis:
+          - id: 200
+            name: VoiceVLAN
+            enabled: true
+            ip_address_virtual: 10.200.200.1/24
+
+      - name: VRF_DATA
+        vrf_vni: 500
+        svis:
+          - id: 300
+            name: DataVLAN
+            enabled: true
+            ip_address_virtual: 10.300.300.1/24
+
