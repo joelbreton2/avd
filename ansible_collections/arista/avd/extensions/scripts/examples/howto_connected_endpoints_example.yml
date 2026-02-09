@@ -1,0 +1,106 @@
+---
+# Example configuration for generating Connected Endpoints how-to guide molecule infrastructure
+# This demonstrates using connected_endpoints instead of network_ports
+
+guide:
+  name: "Connected Endpoints"
+  prefix: "HTCE"  # How-To Connected Endpoints
+  docs_path: "../../../../../../docs/howto/connected_endpoints"
+
+switches:
+  - name: htce-leaf1a
+    mgmt_ip: 172.16.1.211/24
+  - name: htce-leaf1b
+    mgmt_ip: 172.16.1.212/24
+
+bgp_as: 65103
+
+# Port profiles for connected endpoints
+port_profiles:
+  - profile: PP-SERVER
+    mode: trunk
+    vlans: "100,200"
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: enabled
+
+  - profile: PP-STORAGE
+    mode: access
+    vlans: "300"
+    spanning_tree_portfast: edge
+    mtu: 9214
+
+# Connected endpoints - device-centric approach
+connected_endpoints:
+  - name: WEB-SERVER-01
+    adapters:
+      - endpoint_ports: [eth0, eth1]
+        switch_ports: [Ethernet10, Ethernet10]
+        switches: [htce-leaf1a, htce-leaf1b]
+        profile: PP-SERVER
+        port_channel:
+          description: "WEB-SERVER-01 Port-Channel"
+          mode: active
+    description: "Web Server 01"
+
+  - name: DB-SERVER-01
+    adapters:
+      - endpoint_ports: [eth0]
+        switch_ports: [Ethernet11]
+        switches: [htce-leaf1a]
+        profile: PP-SERVER
+    description: "Database Server 01"
+
+  - name: STORAGE-01
+    adapters:
+      - endpoint_ports: [eth0]
+        switch_ports: [Ethernet20]
+        switches: [htce-leaf1a]
+        profile: PP-STORAGE
+    description: "Storage Array 01"
+
+# Network services
+network_services:
+  - name: TENANT_HTCE
+    mac_vrf_vni_base: 30000
+    vrfs:
+      - name: VRF_PROD
+        vrf_vni: 600
+        svis:
+          - id: 100
+            name: WebServers
+            enabled: true
+            ip_address_virtual: 10.100.100.1/24
+          - id: 200
+            name: DatabaseServers
+            enabled: true
+            ip_address_virtual: 10.200.200.1/24
+
+      - name: VRF_STORAGE
+        vrf_vni: 700
+        svis:
+          - id: 300
+            name: StorageNetwork
+            enabled: true
+            ip_address_virtual: 10.300.300.1/24
+
+# Artifacts
+artifacts:
+  - file: inventory/intended/configs/htce-leaf1a.cfg
+    sections:
+      - header: "interface Port-Channel10"
+      - header: "interface Ethernet10"
+    artifact: "htce-leaf1a-webserver-01.cfg"
+    output_dir: "../../../../../../docs/howto/connected_endpoints/artifacts/"
+
+  - file: inventory/intended/configs/htce-leaf1a.cfg
+    sections:
+      - header: "interface Ethernet11"
+    artifact: "htce-leaf1a-dbserver-01.cfg"
+    output_dir: "../../../../../../docs/howto/connected_endpoints/artifacts/"
+
+  - file: inventory/intended/configs/htce-leaf1a.cfg
+    sections:
+      - header: "interface Ethernet20"
+    artifact: "htce-leaf1a-storage-01.cfg"
+    output_dir: "../../../../../../docs/howto/connected_endpoints/artifacts/"
+

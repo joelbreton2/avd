@@ -1,0 +1,145 @@
+---
+# Example configuration for generating Network Ports how-to guide molecule infrastructure
+# This file demonstrates all available options
+
+guide:
+  name: "Network Ports"  # Human-readable name for the guide
+  prefix: "HTNP"  # Prefix for inventory groups (e.g., HTNP_L3_LEAFS)
+  docs_path: "../../../../../../docs/howto/network_ports"  # Path to docs directory
+
+# List of switches to create in the inventory
+switches:
+  - name: htnp-leaf1a
+    mgmt_ip: 172.16.1.201/24
+  - name: htnp-leaf1b
+    mgmt_ip: 172.16.1.202/24
+
+# BGP AS number for the fabric (optional, default: 65102)
+bgp_as: 65102
+
+# Optional: Override L3 leaf defaults
+# l3leaf_defaults:
+#   platform: vEOS-lab
+#   loopback_ipv4_pool: 10.255.0.0/27
+#   spanning_tree_mode: mstp
+
+# Port profiles - reusable templates for switchport configurations
+port_profiles:
+  - profile: PP-WebServer
+    mode: access
+    vlans: "100"
+    spanning_tree_portfast: edge
+    storm_control:
+      all:
+        level: "10"
+        unit: percent
+
+  - profile: PP-VOIP-PHONE
+    mode: access
+    vlans: "200"
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: enabled
+    poe:
+      priority: high
+      limit:
+        watts: "15.4"
+
+  - profile: PP-TRUNK-UPLINK
+    mode: trunk
+    vlans: "100,200,300"
+    native_vlan: 1
+    spanning_tree_portfast: network
+
+# Network ports - apply port profiles to interface ranges
+network_ports:
+  - switches:
+      - htnp-leaf1a
+      - htnp-leaf1b
+    switch_ports:
+      - Ethernet10-15
+    profile: PP-WebServer
+    description: "Web Server Ports"
+
+  - switches:
+      - htnp-leaf1a
+    switch_ports:
+      - Ethernet20-24
+    profile: PP-VOIP-PHONE
+    description: "VOIP Phone Ports"
+
+  - switches:
+      - htnp-leaf1b
+    switch_ports:
+      - Ethernet20
+    profile: PP-TRUNK-UPLINK
+    description: "Trunk Uplink Port"
+
+# Network services - VLANs and VRFs
+network_services:
+  - name: TENANT_HTNP
+    mac_vrf_vni_base: 20000
+    vrfs:
+      - name: VRF_WEB
+        vrf_vni: 300
+        svis:
+          - id: 100
+            name: WebServers
+            enabled: true
+            ip_address_virtual: 10.100.100.1/24
+
+      - name: VRF_VOICE
+        vrf_vni: 400
+        svis:
+          - id: 200
+            name: VoiceVLAN
+            enabled: true
+            ip_address_virtual: 10.200.200.1/24
+
+      - name: VRF_DATA
+        vrf_vni: 500
+        svis:
+          - id: 300
+            name: DataVLAN
+            enabled: true
+            ip_address_virtual: 10.300.300.1/24
+
+# Artifact extraction rules - define which config sections to extract
+artifacts:
+  - file: inventory/intended/configs/htnp-leaf1a.cfg
+    sections:
+      - header: "interface Ethernet10"
+      - header: "interface Ethernet11"
+      - header: "interface Ethernet12"
+      - header: "interface Ethernet13"
+      - header: "interface Ethernet14"
+      - header: "interface Ethernet15"
+    artifact: "htnp-leaf1a-webserver-ports.cfg"
+    output_dir: "../../../../../../docs/howto/network_ports/artifacts/"
+
+  - file: inventory/intended/configs/htnp-leaf1a.cfg
+    sections:
+      - header: "interface Ethernet20"
+      - header: "interface Ethernet21"
+      - header: "interface Ethernet22"
+      - header: "interface Ethernet23"
+      - header: "interface Ethernet24"
+    artifact: "htnp-leaf1a-voip-ports.cfg"
+    output_dir: "../../../../../../docs/howto/network_ports/artifacts/"
+
+  - file: inventory/intended/configs/htnp-leaf1b.cfg
+    sections:
+      - header: "interface Ethernet10"
+      - header: "interface Ethernet11"
+      - header: "interface Ethernet12"
+      - header: "interface Ethernet13"
+      - header: "interface Ethernet14"
+      - header: "interface Ethernet15"
+    artifact: "htnp-leaf1b-webserver-ports.cfg"
+    output_dir: "../../../../../../docs/howto/network_ports/artifacts/"
+
+  - file: inventory/intended/configs/htnp-leaf1b.cfg
+    sections:
+      - header: "interface Ethernet20"
+    artifact: "htnp-leaf1b-trunk-port.cfg"
+    output_dir: "../../../../../../docs/howto/network_ports/artifacts/"
+
