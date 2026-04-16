@@ -1,0 +1,137 @@
+---
+name: "Release PyAVD"
+
+"on":
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      TESTPYPI_VERSION:
+        description: "Version string to install from TestPyPI (e.g. 6.2.0.dev1). Used for the test job."
+        required: true
+        type: string
+      RELEASE_TAG:
+        description: "Tag to build from (e.g. v6.2.0). Only used for workflow_dispatch; release events use the published tag automatically."
+        required: false
+        type: string
+
+jobs:
+  # -------------------------------------- #
+  # Build the pyavd wheel                  #
+  # -------------------------------------- #
+  build-pyavd:
+    name: Build pyavd
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.release.tag_name || inputs.RELEASE_TAG }}
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Build pyavd wheel
+        working-directory: python-avd
+        run: |
+          pip install build
+          python -m build --wheel
+
+      - name: Get version from wheel filename
+        id: get_version
+        run: |
+          WHEEL=$(ls python-avd/dist/*.whl | head -1)
+          VERSION=$(basename "$WHEEL" | sed 's/pyavd-\(.*\)-py3.*/\1/')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Upload pyavd artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: pyavd-dist
+          path: python-avd/dist/*.whl
+
+  # -------------------------------------- #
+  # Publish to TestPyPI                    #
+  # -------------------------------------- #
+  publish-pyavd-testpypi:
+    name: Publish pyavd to TestPyPI
+    needs: [build-pyavd]
+    runs-on: ubuntu-latest
+    environment:
+      name: test
+      url: https://test.pypi.org/p/pyavd
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: pyavd-dist
+          path: dist/
+
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          skip-existing: true
+
+  # -------------------------------------- #
+  # Install from TestPyPI and smoke test   #
+  # -------------------------------------- #
+  test-pyavd-from-testpypi:
+    name: Test pyavd from TestPyPI (${{ matrix.python-version }} / ${{ matrix.os }})
+    needs: [build-pyavd, publish-pyavd-testpypi]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ubuntu-latest, ubuntu-24.04-arm, windows-latest, macos-15-intel, macos-latest]
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          sparse-checkout: |
+            python-avd/tests
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install pyavd from TestPyPI and test dependencies
+        run: |
+          pip install \
+            -i https://test.pypi.org/simple/ \
+            "pyavd==${{ github.event_name == 'workflow_dispatch' && inputs.TESTPYPI_VERSION || needs.build-pyavd.outputs.version }}" \
+            --extra-index-url https://pypi.org/simple \
+            pytest
+
+      - name: Run smoke tests
+        working-directory: python-avd
+        run: |
+          pytest \
+            tests/pyavd/_anta/test_utils.py \
+            tests/pyavd/api/test_avdpoolmanager.py \
+            tests/pyavd/j2filters/ \
+            tests/pyavd/j2tests/ \
+            -v --tb=short
+
+  # -------------------------------------- #
+  # Publish to PyPI (release events only)  #
+  # -------------------------------------- #
+  publish-pyavd-pypi:
+    name: Publish pyavd to PyPI
+    needs: [test-pyavd-from-testpypi]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+    environment:
+      name: production
+      url: https://pypi.org/p/pyavd
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: pyavd-dist
+          path: dist/
+
+      - uses: pypa/gh-action-pypi-publish@release/v1
