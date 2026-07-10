@@ -143,13 +143,13 @@ The topology file format depends on the target Digital Twin platform (e.g., `<FA
 
 Global Digital Twin settings are configured under the `digital_twin` key in the fabric variables.
 
-For a complete list of all available global Digital Twin configuration options, see the [Digital Twin Configuration](../../../ansible_collections/arista/avd/roles/eos_designs/docs/data-models.md#preview---digital-twin-configuration) section in the eos_designs data models documentation.
+For a complete list of all available global Digital Twin configuration options, see the [Digital Twin Configuration](../../../ansible_collections/arista/avd/roles/eos_designs/docs/data-models.md#preview-digital-twin-configuration) section in the eos_designs data models documentation.
 
 ### Per-Node Digital Twin Configuration
 
 In addition to global settings, Digital Twin settings can be configured per node type, node group or per individual node.
 
-For a complete list of all available per-node Digital Twin configuration options, see the [Node Type Digital Twin Configuration](../../../ansible_collections/arista/avd/roles/eos_designs/docs/data-models.md#preview---node-type-digital-twin-configuration) section in the eos_designs data models documentation.
+For a complete list of all available per-node Digital Twin configuration options, see the [Node Type Digital Twin Configuration](../../../ansible_collections/arista/avd/roles/eos_designs/docs/data-models.md#preview-node-type-digital-twin-configuration) section in the eos_designs data models documentation.
 
 ### Configuring the Digital Twin Environment
 
@@ -358,10 +358,10 @@ ACT users connect to device eAPI through ACT's infrastructure. This connectivity
 
 If production configuration uses a dedicated management VRF for eAPI, ACT will not be able to connect to devices. Use the `act_ensure_eapi_access` setting to resolve this for all fabric nodes:
 
-```yaml
-digital_twin:
-  fabric:
-    act_ensure_eapi_access: true
+```yaml title="ACT eAPI access control variables"
+--8<--
+ansible_collections/arista/avd/extensions/molecule/howto/inventory/group_vars/HTDT/fabric.yml:act_environment
+--8<--
 ```
 
 When enabled, AVD makes the following adjustments to the generated Digital Twin configuration:
@@ -371,31 +371,28 @@ When enabled, AVD makes the following adjustments to the generated Digital Twin 
 
 This setting only applies to ACT `veos` and `cloudeos` node types.
 
-**Example - Production Configuration:**
+The molecule test input enables eAPI in the `default` VRF with both IPv4 and IPv6 ACLs:
 
-```eos
-management api http-commands
-   protocol https
-   no shutdown
-   !
-   vrf MGMT
-      no shutdown
-      ip access-group eapi_acl_in
+```yaml title="Production eAPI settings"
+--8<--
+ansible_collections/arista/avd/extensions/molecule/howto/inventory/group_vars/HTDT/fabric.yml:management_eapi_default_vrf
+--8<--
 ```
 
-**Example - Digital Twin Configuration with `act_ensure_eapi_access: true`:**
+AVD generates the following production configuration before Digital Twin adjustments:
 
-```diff
-  management api http-commands
-     protocol https
-     no shutdown
-     !
-     vrf MGMT
-        no shutdown
-        ip access-group eapi_acl_in
-     !
-+    vrf default
-+       no shutdown
+```cli title="Production eAPI configuration"
+--8<--
+docs/howto/digital_twin/artifacts/htdt-leaf1-eapi.cfg
+--8<--
+```
+
+With `act_ensure_eapi_access: true`, the Digital Twin output keeps eAPI enabled in `default` VRF and removes the IPv4 ACL:
+
+```cli title="ACT Digital Twin eAPI configuration"
+--8<--
+docs/howto/digital_twin/artifacts/htdt-leaf1-digital-twin-eapi.cfg
+--8<--
 ```
 
 #### ACT Internet Access Configuration

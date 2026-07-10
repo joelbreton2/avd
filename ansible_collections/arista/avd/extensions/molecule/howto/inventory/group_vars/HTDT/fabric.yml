@@ -1,0 +1,22 @@
+---
+# Digital Twin How-To Guide
+
+fabric_name: FABRIC
+
+# --8<-- [start:act_environment]
+digital_twin:
+  environment: act
+  fabric:
+    act_ensure_eapi_access: true
+# --8<-- [end:act_environment]
+
+# --8<-- [start:management_eapi_default_vrf]
+management_eapi:
+  enabled: true
+  enable_http: true
+  vrfs:
+    - name: default
+      enabled: true
+      ipv4_acl: eapi_ipv4_acl_in
+      ipv6_acl: eapi_ipv6_acl_in
+# --8<-- [end:management_eapi_default_vrf]

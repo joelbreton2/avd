@@ -1,0 +1,10 @@
+---
+type: l2leaf
+
+l2leaf:
+  defaults:
+    platform: vEOS-lab
+  nodes:
+    - name: htdt-leaf1
+      id: 1
+      mgmt_ip: 172.16.3.101/24

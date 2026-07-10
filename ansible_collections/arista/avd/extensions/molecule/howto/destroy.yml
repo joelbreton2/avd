@@ -12,6 +12,7 @@
         state: absent
       with_items:
         - documentation
+        - digital_twin
         - intended
         - config_backup
         - reports
@@ -24,5 +25,6 @@
         state: absent
       with_items:
         - connected_endpoints/artifacts
+        - digital_twin/artifacts
         - network_services/artifacts
         - node_types/artifacts

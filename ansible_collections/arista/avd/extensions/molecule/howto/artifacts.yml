@@ -92,3 +92,16 @@ artifacts:
       - header: "interface Loopback0"
     artifact: "spine2-loopback.cfg"
     output_dir: "ip_addressing/artifacts/"
+
+  # Digital Twin artifacts
+  - file: inventory/intended/configs/htdt-leaf1.cfg
+    sections:
+      - header: "management api http-commands"
+    artifact: "htdt-leaf1-eapi.cfg"
+    output_dir: "digital_twin/artifacts/"
+
+  - file: inventory/digital_twin/intended/configs/htdt-leaf1.cfg
+    sections:
+      - header: "management api http-commands"
+    artifact: "htdt-leaf1-digital-twin-eapi.cfg"
+    output_dir: "digital_twin/artifacts/"
